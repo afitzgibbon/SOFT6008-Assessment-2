@@ -1,0 +1,55 @@
+body {
+	width : 960px;
+	margin : auto;
+	background-color : white;
+	border : 2px solid black;
+}
+
+header, footer {
+	background-color : rgba(255,0,0,0.5);
+}
+
+main {
+	display : flex;
+}
+
+#presetContainer {
+	background-color : rgba(0,255,0,0.5);
+	flex : 1;
+}
+
+#displayContainer {
+	background-color : rgba(0,0,255,0.5);
+	flex : 2;
+}
+
+#configContainer {
+	background-color : rgba(255,255,0,0.5);
+	flex : 1;
+}
+
+hr {
+	margin : auto; /* remove whitespace around the rule */
+}
+
+@media screen and (max-width : 960px) {
+	body {
+		width : auto;
+	}
+}
+
+@media screen and (max-width : 700px) {
+	main {
+		flex-flow : row wrap;
+	}
+	#presetContainer {
+		min-width : 700px;
+	}
+	#displayContainer {
+		flex : 1;
+		min-width : 200px;
+	}
+	#configContainer {
+		min-width : 200px;
+	}
+}
