@@ -9,6 +9,10 @@ header, footer {
 	background-color : rgba(255,0,0,0.5);
 }
 
+hr {
+	margin : auto; /* remove whitespace around the rule */
+}
+
 main {
 	display : flex;
 }
@@ -19,8 +23,12 @@ main {
 }
 
 #displayContainer {
-	background-color : rgba(0,0,255,0.5);
-	flex : 2;
+	position : relative;
+	width : 510px;
+	height : 454px;
+	
+	/*max-height : 454px;*/
+	/*background-color : rgba(0,0,255,0.5);*/
 }
 
 #configContainer {
@@ -28,9 +36,83 @@ main {
 	flex : 1;
 }
 
-hr {
-	margin : auto; /* remove whitespace around the rule */
+/*#tshirt {*/
+img {
+	position : absolute;
+	top : 0px;
+	left : 0px;
+	z-index : 1;
 }
+
+/*#canvas : {*/
+#canvasLayer {
+	position : absolute;
+	top : 0px;
+	left : 0px;
+	height : 510;
+	width : 454;
+	z-index : 2;
+}
+
+#colorContainer {
+	display : block;
+}
+
+#colorChooser, #colorPalette {
+	display : flex;
+	padding : 5px;
+}
+
+#colorPalette {
+	/*display : flex;*/
+	flex-flow : row wrap;
+	width : 130px;
+	border : 1px solid black;
+}
+
+.colorBox {
+	width : 20px;
+	height : 20px;
+	border : 1px solid black;
+	margin : 2px;
+	text-align : center;
+}
+
+#colorBox1 {
+	background-color : white;
+}
+
+#colorWhite {
+	background-color : white; 
+}
+#colorBlack {
+	background-color : black;
+}
+#colorRed {
+	background-color : red;
+}
+#colorGreen {
+	background-color : green;
+}
+#colorBlue {
+	background-color : blue;
+}
+#colorGrey {
+	background-color : grey;
+}
+#colorYellow {
+	background-color : yellow;
+}
+#colorPurple {
+	background-color : purple;
+}
+#colorOrange {
+	background-color : orange;
+}
+#colorPink {
+	background-color : pink;
+}
+
 
 @media screen and (max-width : 960px) {
 	body {
@@ -47,9 +129,13 @@ hr {
 	}
 	#displayContainer {
 		flex : 1;
-		min-width : 200px;
+		min-width : 510px;
 	}
 	#configContainer {
 		min-width : 200px;
+	}
+	#tshirt {
+		display : block;
+		margin : auto;
 	}
 }

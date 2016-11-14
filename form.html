@@ -12,9 +12,39 @@
 			<main>
 				<aside id="presetContainer"><h2>presets</h2></aside>
 				
-				<div id="displayContainer"><h2>display</h2></div>
+				<div id="displayContainer">
+					<img id="tshirt" src="./images/t-shirt.png" width=510 height=454 alt="t-shirt">
+					<canvas id="canvasLayer"></canvas>
+				</div>
 				
-				<aside id="configContainer"><h2>config</h2></aside>
+				<aside id="configContainer">
+					<div id="colorContainer">
+						<div id="colorChooser">
+							<div id="colorBox1" class="colorBox colorSelector colorSelected"><input type="hidden" name="Color 1" value="white"><span></span></div>
+							<div class="colorBox colorSelector"><input type="hidden" name="Color 2" value=""><span>x</span></div>
+							<div class="colorBox colorSelector"><input type="hidden" name="Color 3" value=""><span>x</span></div>                                                             
+							<div class="colorBox colorSelector"><input type="hidden" name="Color 4" value=""><span>x</span></div>
+							<div class="colorBox colorSelector"><input type="hidden" name="Color 5" value=""><span>x</span></div>
+						</div>
+						<div id="colorPalette">
+							<div id="colorWhite" class="colorBox colorPreset"><input type="hidden" value="white"></div>
+							<div id="colorPink" class="colorBox colorPreset"><input type="hidden" value="pink"></div>
+							<div id="colorOrange" class="colorBox colorPreset"><input type="hidden" value="orange"></div>
+							<div id="colorRed" class="colorBox colorPreset"><input type="hidden" value="red"></div>
+							<div id="colorBlue" class="colorBox colorPreset"><input type="hidden" value="blue"></div>			
+							<div id="colorBlack" class="colorBox colorPreset"><input type="hidden" value="black"></div>
+							<div id="colorGrey" class="colorBox colorPreset"><input type="hidden" value="grey"></div>
+							<div id="colorYellow" class="colorBox colorPreset"><input type="hidden" value="yellow"></div>
+							<div id="colorGreen" class="colorBox colorPreset"><input type="hidden" value="green"></div>
+							<div id="colorPurple" class="colorBox colorPreset"><input type="hidden" value="purple"></div>	
+						</div>
+						<div id="styleChooser">
+							<input id="rbLinear" type="radio" name="gradient" value="linear" disabled checked>Linear
+							<input id="rbRadial" type="radio" name="gradient" value="radial" disabled>Radial
+						</div>
+						<p id="output"><p>
+					</div>
+				</aside>
 			</main>
 			
 			<footer>
@@ -24,6 +54,7 @@
 			</footer>
 		</div>
 		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 		<script src="./js/calculate.js"></script>
 	</body>
 </html>
