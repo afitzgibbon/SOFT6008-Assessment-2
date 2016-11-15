@@ -13,7 +13,9 @@
 				<aside id="presetContainer"><h2>presets</h2></aside>
 				
 				<div id="displayContainer">
-					<img id="tshirt" src="./images/t-shirt.png" width=510 height=454 alt="t-shirt">
+					<div id="backgroundLayer"></div>
+					<img id="imageLayer" src="./images/t-shirt.png" width=510 height=454 alt="t-shirt">
+					<div id="textLayer"><span id="textDisplay"></span></div>
 					<canvas id="canvasLayer"></canvas>
 				</div>
 				
@@ -42,7 +44,14 @@
 							<input id="rbLinear" type="radio" name="gradient" value="linear" disabled checked>Linear
 							<input id="rbRadial" type="radio" name="gradient" value="radial" disabled>Radial
 						</div>
-						<p id="output"><p>
+						<div id="sizeChooser">
+							<select id="selectSize" name="size">
+								<option value="small">Small</option>
+								<option value="medium">Medium</option>
+								<option value="large">Large</option>
+								<option value="xlarge" selected>Extra Large</option>
+							</select>
+						</div>
 					</div>
 				</aside>
 			</main>

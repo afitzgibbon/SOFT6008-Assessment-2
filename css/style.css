@@ -10,7 +10,7 @@ header, footer {
 }
 
 hr {
-	margin : auto; /* remove whitespace around the rule */
+	margin : auto; /* remove whitespace around the ruler */
 }
 
 main {
@@ -25,33 +25,54 @@ main {
 #displayContainer {
 	position : relative;
 	width : 510px;
-	height : 454px;
-	
-	/*max-height : 454px;*/
-	/*background-color : rgba(0,0,255,0.5);*/
+	height : 454px;	
 }
 
 #configContainer {
 	background-color : rgba(255,255,0,0.5);
 	flex : 1;
 }
-
-/*#tshirt {*/
-img {
+              
+#backgroundLayer {
 	position : absolute;
-	top : 0px;
-	left : 0px;
+	width : 510px;
+	height : 454px;
 	z-index : 1;
 }
 
-/*#canvas : {*/
+#imageLayer {
+	position : absolute;
+	top : 0px;
+	left : 0px;
+	z-index : 2;
+}
+
+#textLayer {
+	position : absolute;
+	top : 170px;
+	left : 155px;
+	width : 200px;
+	height : 100px;
+	z-index : 3;
+	text-align : center;
+	word-wrap : break-word;
+}
+
+#textDisplay {
+	display : block;
+	color : white;
+	font : bold italic 25px Helvetica;
+	background-color : rgba(0,0,0,0.1);
+	padding : 5px;
+}
+
 #canvasLayer {
 	position : absolute;
 	top : 0px;
 	left : 0px;
-	height : 510;
-	width : 454;
-	z-index : 2;
+	width : 510px;
+	height : 454px;
+	z-index : 4;
 }
 
 #colorContainer {
@@ -64,7 +85,6 @@ img {
 }
 
 #colorPalette {
-	/*display : flex;*/
 	flex-flow : row wrap;
 	width : 130px;
 	border : 1px solid black;
