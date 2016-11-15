@@ -12,31 +12,22 @@ for (var i=0; i<colorPresets.length; i++) {
 }
 
 var xStart, yStart, xEnd, yEnd;
+var scaleFactor = 1; // factor to be used for calculating resizing
 var mouseDown = false;
+var imageWidth = document.getElementById("imageLayer").width;
+var imageHeight = document.getElementById("imageLayer").height;
 var canvas = document.getElementById("canvasLayer");
-//canvas.width = canvas.offsetWidth;
-//canvas.height = canvas.offsetHeight;
-canvas.width = 510;
-canvas.height = 454;
+canvas.width = imageWidth;
+canvas.height = imageHeight;
 var ctx = canvas.getContext("2d");
-var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-
-//var background = new Image();
-//background.src = "./images/t-shirt.png";
-//background.onload = function() { ctx.drawImage(background,0,0); }
-
-//document.getElementById('tshirt').ondragstart = function() { return false; }; // disable image drag
+var imageData = ctx.getImageData(0, 0, imageWidth, imageHeight);
 
 canvas.addEventListener("mousedown", function(e) { setStartCoordinates(e); });
 canvas.addEventListener("mousemove", function(e) { drawLine(e); });
 canvas.addEventListener("mouseup", calculateAngle);
 
-//canvas.addEventListener("click", function() { alert("i am the canvas"); });
-//document.getElementById("tshirt").addEventListener("click", function() { alert("i am the image"); }); 
+document.getElementById("selectSize").addEventListener("change", function() { changeSize(this); });
 
-//document.getElementById("tshirt").addEventListener("mousedown", function(e) { setStartCoordinates(e); });
-//document.getElementById("tshirt").addEventListener("mousemove", function(e) { drawLine(e); });
-//document.getElementById("tshirt").addEventListener("mouseup", calculateAngle);
 
 function addColorToSelection(colorBox) {
 	$("div#colorPalette").slideUp(500);
@@ -75,8 +66,17 @@ function calculateAngle() {
 	}
 	
 	paintTShirt(angle);
-	
-	//print("End   : (" + xEnd + ", " + yEnd + ")");
+}
+
+function changeSize(el) {
+	switch (el.value) {
+	case "small": 	scaleFactor = 0.7; break;
+	case "medium":	scaleFactor = 0.8; break;
+	case "large":	scaleFactor = 0.9; break;
+	case "xlarge":	scaleFactor = 1.0; break;
+	default: alert("Error: default condition in changeSize()"); return;
+	}
+	resize();
 }
 
 function drawLine(e) {
@@ -95,32 +95,25 @@ function drawLine(e) {
 function enableColorBox(colorBox) {
 	colorBox.children[1].textContent = "";
 	activeColorSelector = colorBox;
-	//$(colorBox).addClass("colorSelected");
 	$("div#colorPalette").slideDown(500);
 }
 
 function getMousePos(e) {
+	// scaleFactor takes into account if the image has been resized and is used to 
+	// return an x/y value relative to that 
 	var rect = canvas.getBoundingClientRect();
 	return {
-		x: Math.round(e.clientX - rect.left),
-		y: Math.round(e.clientY - rect.top)
+		x: Math.round((e.clientX - rect.left)/scaleFactor),
+		y: Math.round((e.clientY - rect.top)/scaleFactor)
 	};
 }
 
 function paintTShirt(angle) {
 	var selectedColors = document.getElementsByClassName("colorSelected");
 	
-	//if (selectedColors.length == 1) {
-	//	$("div#displayContainer").css("background-color", colorSelectors[0].children[0].value);
-	//}
-	//else {
-	
-	if (selectedColors.length == 0) {
-		document.getElementById("canvasParent").style.background = "white";
-	}
-	else if (selectedColors.length == 1) {
-		$("div#displayContainer").css("background", "white"); // resets any background gradient
-		$("div#displayContainer").css("background-color", colorSelectors[0].children[0].value);
+	if (selectedColors.length == 1) {
+		$("div#backgroundLayer").css("background", "white"); // resets any background gradient
+		$("div#backgroundLayer").css("background-color", colorSelectors[0].children[0].value);
 	}
 	else {
 		if (angle == 0) {
@@ -164,43 +157,43 @@ function paintTShirt(angle) {
 			}			
 		}
 		
-//		colorString = "linear-gradient(" + angle + "deg,";
-		
-//		for (var i=0; i<selectedColors.length; i++) {
-//			var percentagePoint = Math.round(((endPoint - startPoint) / (selectedColors.length - 1) * i) + startPoint);
-//			colorString += selectedColors[i].children[0].value + " " + percentagePoint + "%";
-//			if (i != selectedColors.length - 1 ? colorString += ", " : colorString += ")");
-//		}
-		
-		//alert("x=" + Math.round((xStart / canvas.width) * 100) + "%   y=" + Math.round((yStart / canvas.height) * 100) + "%");
-		//alert(colorString);
-		$("div#displayContainer").css({"background" : colorString});
-		
-		//alert($("input[name=gradient]").attr("disabled"));
-		$("input[name=gradient]").removeAttr("disabled");
-		//alert($("input[name=gradient]").attr("disabled"));
+		$("div#backgroundLayer").css({"background" : colorString});
+		$("input[name=gradient]").removeAttr("disabled"); // gradients are now enabled
 	}
-	//}
+}
+
+function resize() {
+	var newWidth = Math.round(imageWidth * scaleFactor);
+	var newHeight = Math.round(imageHeight * scaleFactor);
+	var offsetLeft = Math.round((imageWidth - newWidth) / 2);
+	var offsetTop = Math.round((imageHeight - newHeight) / 2);
 	
-	/*
-	var activeBoxes = 0;
+	$("img#imageLayer").height(newHeight);
+	$("img#imageLayer").width(newWidth);
+	$("img#imageLayer").css({ top : offsetTop + "px" });
+	$("img#imageLayer").css({ left : offsetLeft + "px" });
 	
-	for (var i=0; i<colorSelectors.length; i++) {
-		if (colorSelectors[i].textContent == "x") {
-			break;
-		}
-		else {
-			activeBoxes++;
-		}
-	}
+	$("canvas#canvasLayer").height(newHeight);
+	$("canvas#canvasLayer").width(newWidth);
+	$("canvas#canvasLayer").css({ top : offsetTop + "px" });
+	$("canvas#canvasLayer").css({ left : offsetLeft + "px" });
 	
-	if (activeBoxes == 1) {
-		$("div#displayContainer").css("background-color", colorSelectors[0].children[0].value);
-	}
-	else {
-		$("input[name=gradient]").removeAttr("disabled");
-	}
-	*/
+	$("div#backgroundLayer").height(newHeight);
+	$("div#backgroundLayer").width(newWidth);
+	$("div#backgroundLayer").css({ top : offsetTop + "px" });
+	$("div#backgroundLayer").css({ left : offsetLeft + "px" });
+		
+	newWidth = Math.round(200 * scaleFactor);
+	newHeight = Math.round(100 * scaleFactor);
+	offsetLeft = Math.round((imageWidth - newWidth) / 2);
+	offsetTop = Math.round((imageHeight - newHeight) / 2);
+	
+	$("div#textLayer").width(newWidth);
+	$("div#textLayer").height(newHeight);
+	$("div#textLayer").css({ top : offsetTop + "px" });
+	$("div#textLayer").css({ left : offsetLeft + "px" });
+	
+	$("span#textDisplay").css("font-size", (25 * scaleFactor) + "px");
 }
 
 function selectColor(colorBox) {
@@ -224,12 +217,6 @@ function selectColor(colorBox) {
 function setStartCoordinates(e) {
 	xEnd = xStart = getMousePos(e).x; //initialise xEnd=xStart, othewise it may be undefined
 	yEnd = yStart = getMousePos(e).y;
-	//print("Start : (" + xStart + ", " + yStart + ")");
 	
-	mouseDown = true;
-}
-
-function print(msg) { 
-	var text = document.getElementById("output").innerHTML;
-	document.getElementById("output").innerHTML = text + "<br>" + msg;
+	mouseDown = true; // start tracking mouse position while mouse button is held
 }
