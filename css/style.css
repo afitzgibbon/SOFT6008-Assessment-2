@@ -28,9 +28,33 @@ main {
 	height : 454px;	
 }
 
+#sliderContainer {
+	flex : 1;
+	
+	position : relative;
+}
+
 #configContainer {
 	background-color : rgba(255,255,0,0.5);
-	flex : 1;
+	/*flex : 1;*/
+	
+	position : absolute;
+	top : 0px;
+	left : 0px;
+	width : 100%;
+	height : 100%;
+	z-index : 2;
+}
+
+#formContainer {
+	background-color : rgba(0,255,255,0.5);
+	
+	position : absolute;
+	top : 0px;
+	left : 0px;
+	width : 100%;
+	height : 100%;
+	z-index : 1;
 }
               
 #backgroundLayer {
@@ -47,23 +71,30 @@ main {
 	z-index : 2;
 }
 
+#logoLayer {
+	position : absolute;
+	top : 110px;
+	left : 300px;
+	z-index : 3;
+}
+
 #textLayer {
 	position : absolute;
 	top : 170px;
 	left : 155px;
 	width : 200px;
 	height : 100px;
-	z-index : 3;
+	z-index : 4;
 	text-align : center;
 	word-wrap : break-word;
 }
 
 #textDisplay {
 	display : block;
-	color : white;
+	/*color : white;*/
 	font : bold italic 25px Helvetica;
-	background-color : rgba(0,0,0,0.1);
-	padding : 5px;
+	/*background-color : rgba(0,0,0,0.1);*/
+	/*padding : 5px;*/
 }
 
 #canvasLayer {
@@ -72,7 +103,7 @@ main {
 	left : 0px;
 	width : 510px;
 	height : 454px;
-	z-index : 4;
+	z-index : 5;
 }
 
 #colorContainer {
@@ -131,6 +162,13 @@ main {
 }
 #colorPink {
 	background-color : pink;
+}
+
+#btnResetColors {
+	height : 22px;
+	width : 40px;
+	margin : 2px;
+	text-align : center;
 }
 
 

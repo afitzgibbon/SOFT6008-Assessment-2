@@ -15,45 +15,95 @@
 				<div id="displayContainer">
 					<div id="backgroundLayer"></div>
 					<img id="imageLayer" src="./images/t-shirt.png" width=510 height=454 alt="t-shirt">
+					<img id="logoLayer" width=75 height=52>
 					<div id="textLayer"><span id="textDisplay"></span></div>
 					<canvas id="canvasLayer"></canvas>
 				</div>
 				
-				<aside id="configContainer">
-					<div id="colorContainer">
-						<div id="colorChooser">
-							<div id="colorBox1" class="colorBox colorSelector colorSelected"><input type="hidden" name="Color 1" value="white"><span></span></div>
-							<div class="colorBox colorSelector"><input type="hidden" name="Color 2" value=""><span>x</span></div>
-							<div class="colorBox colorSelector"><input type="hidden" name="Color 3" value=""><span>x</span></div>                                                             
-							<div class="colorBox colorSelector"><input type="hidden" name="Color 4" value=""><span>x</span></div>
-							<div class="colorBox colorSelector"><input type="hidden" name="Color 5" value=""><span>x</span></div>
+				<div id="sliderContainer">
+					<aside id="configContainer">
+						<div id="colorContainer">
+							<div id="colorChooser">
+								<div id="colorBox1" class="colorBox colorSelector colorSelected"><input type="hidden" name="Color 1" value="white"><img src=""></div>
+								<div class="colorBox colorSelector"><input type="hidden" name="Color 2" value=""><img src="./images/x_icon.png" width=20 height=20 alt="X Icon"></div>
+								<div class="colorBox colorSelector"><input type="hidden" name="Color 3" value=""><img src="./images/x_icon.png" width=20 height=20 alt="X Icon"></div>                                                             
+								<div class="colorBox colorSelector"><input type="hidden" name="Color 4" value=""><img src="./images/x_icon.png" width=20 height=20 alt="X Icon"></div>
+								<div class="colorBox colorSelector"><input type="hidden" name="Color 5" value=""><img src="./images/x_icon.png" width=20 height=20 alt="X Icon"></div>
+								<button id="btnResetColors"><<</button>
+							</div>
+							<div id="colorPalette">
+								<div id="colorWhite" class="colorBox colorPreset"><input type="hidden" value="white"></div>
+								<div id="colorPink" class="colorBox colorPreset"><input type="hidden" value="pink"></div>
+								<div id="colorOrange" class="colorBox colorPreset"><input type="hidden" value="orange"></div>
+								<div id="colorRed" class="colorBox colorPreset"><input type="hidden" value="red"></div>
+								<div id="colorBlue" class="colorBox colorPreset"><input type="hidden" value="blue"></div>			
+								<div id="colorBlack" class="colorBox colorPreset"><input type="hidden" value="black"></div>
+								<div id="colorGrey" class="colorBox colorPreset"><input type="hidden" value="grey"></div>
+								<div id="colorYellow" class="colorBox colorPreset"><input type="hidden" value="yellow"></div>
+								<div id="colorGreen" class="colorBox colorPreset"><input type="hidden" value="green"></div>
+								<div id="colorPurple" class="colorBox colorPreset"><input type="hidden" value="purple"></div>	
+							</div>
+							<div id="styleChooser">
+								<input id="rbLinear" type="radio" name="gradient" value="linear" disabled checked>Linear
+								<input id="rbRadial" type="radio" name="gradient" value="radial" disabled>Radial
+							</div>
+							<div id="sizeChooser">
+								<select class="chargable" id="selectSize" name="size">
+									<option selected disabled>Size</option>
+									<option value="small">Small €5.00</option>
+									<option value="medium">Medium €6.00</option>
+									<option value="large">Large €7.00</option>
+									<option value="xlarge">Extra Large €8.00</option>
+								</select>
+							</div>
+							<div id="logoChooser">
+								<select id="selectLogo" name="logo">
+									<option value="none">None</option>
+									<option value="adidas">Adidas</option>
+									<option value="nike">Nike</option>
+									<option value="puma">Puma</option>
+									<option value="reebok">Reebok</option>
+								</select>
+								<br>
+								<input id="rbLogoBlack" type="radio" name="logoColor" value="black" checked>Black
+								<input id="rbLogoWhite" type="radio" name="logoColor" value="white">White
+							</div>
+							<div id="sloganChooser">
+								<textarea id="inputSlogan" rows="4" cols="20" placeholder="Max 40 chars"></textarea>
+								<br>
+								<input id="rbSloganBlack" type="radio" name="textColor" value="black" checked>Black
+								<input id="rbSloganWhite" type="radio" name="textColor" value="white">White
+							</div>
+							<div>
+								<input id="priceDisplay" type="text" placeholder="€0.00">
+							</div>
+							<div>
+								<button id="btnContinue">Continue</button>
+							</div>
 						</div>
-						<div id="colorPalette">
-							<div id="colorWhite" class="colorBox colorPreset"><input type="hidden" value="white"></div>
-							<div id="colorPink" class="colorBox colorPreset"><input type="hidden" value="pink"></div>
-							<div id="colorOrange" class="colorBox colorPreset"><input type="hidden" value="orange"></div>
-							<div id="colorRed" class="colorBox colorPreset"><input type="hidden" value="red"></div>
-							<div id="colorBlue" class="colorBox colorPreset"><input type="hidden" value="blue"></div>			
-							<div id="colorBlack" class="colorBox colorPreset"><input type="hidden" value="black"></div>
-							<div id="colorGrey" class="colorBox colorPreset"><input type="hidden" value="grey"></div>
-							<div id="colorYellow" class="colorBox colorPreset"><input type="hidden" value="yellow"></div>
-							<div id="colorGreen" class="colorBox colorPreset"><input type="hidden" value="green"></div>
-							<div id="colorPurple" class="colorBox colorPreset"><input type="hidden" value="purple"></div>	
-						</div>
-						<div id="styleChooser">
-							<input id="rbLinear" type="radio" name="gradient" value="linear" disabled checked>Linear
-							<input id="rbRadial" type="radio" name="gradient" value="radial" disabled>Radial
-						</div>
-						<div id="sizeChooser">
-							<select id="selectSize" name="size">
-								<option value="small">Small</option>
-								<option value="medium">Medium</option>
-								<option value="large">Large</option>
-								<option value="xlarge" selected>Extra Large</option>
-							</select>
-						</div>
-					</div>
-				</aside>
+					</aside>
+				
+					<aside id="formContainer">
+						<input type="text" placeholder="Name">
+						<input type="text" placeholder="Email">
+						<input type="text" placeholder="Phone">
+						<input tpye="text" placeholder="Address 1">
+						<input type="text" placeholder="Address 2">
+						<input type="text" placeholder="Town/City">
+						<input type="text" placeholder="County">
+						<input type="text" placeholder="Country">
+						<select name="cardType">
+							<option selected disabled>Card Type</option>
+							<option value="mastercard">MasterCard</option>
+							<option value="visa">Visa</option>
+							<option value="visaDebit">Visa Debit</option>
+						</select>
+						<input type="text" placeholder="Card Number">
+						<br><label>Expiry Date</label><input type="text">
+						<br><label>Security Number</label><input type="text">
+						<button id="btnBack">Back</button>
+					</aside>
+				</div>
 			</main>
 			
 			<footer>
