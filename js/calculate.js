@@ -3,13 +3,36 @@ for (var i=0; i<colorSelectors.length; i++) {
 	colorSelectors[i].addEventListener("click", function() { selectColor(this); });
 }
 
-var activeColorSelector;
-$("div#colorPalette").hide();
+var activeColorSelector = colorSelectors[0]; // stores the currently selected colour
+//$("div#colorPalette").hide();
 
 var colorPresets = document.getElementsByClassName("colorPreset");
 for (var i=0; i<colorPresets.length; i++) {
 	colorPresets[i].addEventListener("click", function() { addColorToSelection(this); });
 }
+
+$("button#btnResetColors").click(function() {
+	for (var i=1; i<colorSelectors.length; i++) {
+		colorSelectors[i].style.backgroundColor = "transparent";
+		colorSelectors[i].children[0].value = "";
+		colorSelectors[i].children[1].src = "./images/x_icon.png";
+		$("div.colorSelector").removeClass("colorSelected");
+		//colorSelectors[i].removeClass("colorSelected");
+		//$(activeColorSelector).addClass("colorSelected");
+	}
+	
+	activeColorSelector = colorSelectors[0];
+	addColorToSelection(colorPresets[0]);         
+	
+	$("input[name=gradient]").attr("disabled", "disabled");
+	/*
+	activeColorSelector = colorSelectors[0];
+	activeColorSelector.style.backgroundColor = "white";
+	activeColorSelector.children[0].value = white;
+	$(activeColorSelector).addClass("colorSelected");
+	paintTShirt(0);
+	*/
+});
 
 var xStart, yStart, xEnd, yEnd;
 var scaleFactor = 1; // factor to be used for calculating resizing
@@ -26,15 +49,63 @@ canvas.addEventListener("mousedown", function(e) { setStartCoordinates(e); });
 canvas.addEventListener("mousemove", function(e) { drawLine(e); });
 canvas.addEventListener("mouseup", calculateAngle);
 
+$("input:radio[name=gradient]").change(function() { paintTShirt(0); });
+
+//canvas.addEventListener("click", function(e) {
+//	alert(getMousePos(e).y); 
+//});
+
 document.getElementById("selectSize").addEventListener("change", function() { changeSize(this); });
 
+document.getElementById("selectLogo").addEventListener("change", function() { changeLogo(this); });
+
+$("input:radio[name=logoColor]").change(function() { changeLogo(this); });
+
+//var el = document.getElementById("selectLogo");
+//$("select#selectLogo").change(function() { alert("ok"); });
+//alert("x");
+
+$("textarea#inputSlogan").bind("input propertychange", function() { addTextToTShirt(this); });
+$("input:radio[name=textColor]").change(function() { $("span#textDisplay").css("color", this.value); });
+
+$("aside#formContainer").hide();
+$("button#btnContinue").click(function() {
+	$("aside#configContainer").fadeOut(500);       
+	$("aside#formContainer").fadeIn(500);
+});
+
+$("button#btnBack").click(function() {
+	$("aside#formContainer").fadeOut(500);
+	$("aside#configContainer").fadeIn(500);
+});
 
 function addColorToSelection(colorBox) {
-	$("div#colorPalette").slideUp(500);
+	//$("div#colorPalette").slideUp(500);
 	$(activeColorSelector).css("background-color", colorBox.children[0].value);
 	activeColorSelector.children[0].value = colorBox.children[0].value;
 	$(activeColorSelector).addClass("colorSelected");
 	paintTShirt(0); // '0' specifies the default no angle gradient
+	validatePrice();
+}
+
+function addTextToTShirt(el) {
+	var inputText = el.value;
+	
+	if (inputText.length > 40) {
+		alert("You are not allowed more than 40 characters!");
+		inputText = inputText.substring(0, inputText.length - 1); // remove last char entered
+		$("textarea#inputSlogan").text(inputText);
+	}
+	else if (inputText.length == 0) {
+		$("span#textDisplay").css("padding", "0px");
+	}
+	else {
+		$("span#textDisplay").css("padding", "5px");
+	}
+	
+	$("span#textDisplay").text(inputText);
+	
+	validatePrice();
 }
 
 function calculateAngle() {
@@ -68,6 +139,33 @@ function calculateAngle() {
 	paintTShirt(angle);
 }
 
+function changeLogo(el) {
+	var brand, color;
+	
+	if (el.type == "select-one") {
+		brand = el.value;
+		color = $("input:radio[name=logoColor]:checked").val();
+		if (brand == "none") {
+			$("img#logoLayer").attr("src", "");
+			validatePrice();
+			return;
+		}
+	}
+	else if (el.type == "radio") {
+		var src = $("img#logoLayer").attr("src");
+		if (src == null || src == "") { return; }
+		
+		brand = $("#selectLogo").val();
+		
+		if (src.indexOf("black") != -1)
+			color = "white";
+		else color = "black";
+	}
+	
+	$("img#logoLayer").attr("src", "./images/" + brand + "_logo_" + color + ".png");
+	validatePrice();
+}
+
 function changeSize(el) {
 	switch (el.value) {
 	case "small": 	scaleFactor = 0.7; break;
@@ -77,6 +175,7 @@ function changeSize(el) {
 	default: alert("Error: default condition in changeSize()"); return;
 	}
 	resize();
+	validatePrice();
 }
 
 function drawLine(e) {
@@ -93,9 +192,14 @@ function drawLine(e) {
 }
 
 function enableColorBox(colorBox) {
-	colorBox.children[1].textContent = "";
+	//colorBox.children[1].textContent = "";
+	colorBox.children[1].src = "";
+	//colorBox.style.backgroundColor = "white";
 	activeColorSelector = colorBox;
-	$("div#colorPalette").slideDown(500);
+	if (colorBox.style.backgroundColor == "" || colorBox.style.backgroundColor == "transparent") {
+		addColorToSelection(colorPresets[0]);
+	}
+	//$("div#colorPalette").slideDown(500);
 }
 
 function getMousePos(e) {
@@ -110,7 +214,6 @@ function getMousePos(e) {
 
 function paintTShirt(angle) {
 	var selectedColors = document.getElementsByClassName("colorSelected");
-	
 	if (selectedColors.length == 1) {
 		$("div#backgroundLayer").css("background", "white"); // resets any background gradient
 		$("div#backgroundLayer").css("background-color", colorSelectors[0].children[0].value);
@@ -182,11 +285,23 @@ function resize() {
 	$("div#backgroundLayer").width(newWidth);
 	$("div#backgroundLayer").css({ top : offsetTop + "px" });
 	$("div#backgroundLayer").css({ left : offsetLeft + "px" });
-		
+	
+	newWidth = Math.round(75 * scaleFactor);
+	newHeight = Math.round(52 * scaleFactor);
+	offsetTop = parseInt($("img#imageLayer").css("top")) + (110*scaleFactor);
+	offsetLeft = parseInt($("img#imageLayer").css("left")) + (300*scaleFactor);
+
+	$("img#logoLayer").width(newWidth);
+	$("img#logoLayer").height(newHeight);
+	$("img#logoLayer").css({ top : offsetTop + "px" });
+	$("img#logoLayer").css({ left : offsetLeft + "px" });
+	
 	newWidth = Math.round(200 * scaleFactor);
 	newHeight = Math.round(100 * scaleFactor);
 	offsetLeft = Math.round((imageWidth - newWidth) / 2);
 	offsetTop = Math.round((imageHeight - newHeight) / 2);
+	//offsetLeft = Math.round(((imageWidth * scaleFactor) - newWidth) / 2);
+	//offsetTop = Math.round(((imageHeight * scaleFactor) - newHeight) / 2);
 	
 	$("div#textLayer").width(newWidth);
 	$("div#textLayer").height(newHeight);
@@ -197,6 +312,13 @@ function resize() {
 }
 
 function selectColor(colorBox) {
+	/*
+	if ((colorBox.children[1].src).indexOf("x_icon.png") != -1) {
+		alert("has icon");
+	}
+	else alert("no icon");
+	alert(colorBox.children[1].src);
+	*/
 	var parent = colorBox.parentNode;
 	for (var i=0; i<parent.children.length; i++) {
 		if (parent.children[i] == colorBox) {
@@ -205,7 +327,10 @@ function selectColor(colorBox) {
 			}
 			else {
 				var previous = parent.children[i - 1];
-				if (previous.textContent == "") {
+				//if (previous.textContent == "") {
+				//	enableColorBox(colorBox);
+				//}
+				if ((previous.children[1].src).indexOf("x_icon.png") == -1) {
 					enableColorBox(colorBox);
 				}
 			}			
@@ -219,4 +344,32 @@ function setStartCoordinates(e) {
 	yEnd = yStart = getMousePos(e).y;
 	
 	mouseDown = true; // start tracking mouse position while mouse button is held
+}
+
+function validatePrice() {
+	var price = 0.0;
+	var selectedColors = document.getElementsByClassName("colorSelected");
+	price = (selectedColors.length - 1) * 0.50;
+	
+	switch ($("select#selectSize").val()) {
+	case "small": price += 5; break;
+	case "medium": price += 6; break;
+	case "large": price += 7; break;
+	case "xlarge": price += 8; break;
+	default: // do nothing
+	}
+	
+	switch ($("select#selectLogo").val()) {
+	case "adidas":
+	case "nike":
+	case "puma":
+	case "reebok": price += 7.5; break;
+	default: // do nothing
+	}
+	
+	if ($("textarea#inputSlogan").val() != "") {
+		price += 5;
+	}
+	
+	$("input#priceDisplay").val("\u20AC" + price.toFixed(2));
 }
